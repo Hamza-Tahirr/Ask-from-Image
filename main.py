@@ -1,11 +1,20 @@
+import os
 from tempfile import NamedTemporaryFile
 
 import streamlit as st
+from dotenv import load_dotenv
 from langchain.agents import initialize_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from tools import ImageCaptionTool, ObjectDetectionTool
+
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    st.error("OPENAI_API_KEY is not set. Add it to a .env file or your environment.")
+    st.stop()
 
 
 ##############################
@@ -20,7 +29,7 @@ conversational_memory = ConversationBufferWindowMemory(
 )
 
 llm = ChatOpenAI(
-    openai_api_key='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',
+    openai_api_key=openai_api_key,
     temperature=0,
     model_name="gpt-3.5-turbo"
 )
