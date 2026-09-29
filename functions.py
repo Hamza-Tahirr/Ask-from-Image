@@ -37,7 +37,7 @@ def detect_objects(image_path):
         image_path (str): The path to the image file.
 
     Returns:
-        str: A string with all the detected objects. Each object as '[x1, x2, y1, y2, class_name, confindence_score]'.
+        str: A string with all the detected objects. Each object as '[x1, y1, x2, y2] class_name confidence_score'.
     """
     image = Image.open(image_path).convert('RGB')
 
@@ -59,9 +59,3 @@ def detect_objects(image_path):
         detections += ' {}\n'.format(float(score))
 
     return detections
-
-
-if __name__ == '__main__':
-    image_path = '/home/phillip/Desktop/todays_tutorial/52_langchain_ask_questions_video/code/test.jpg'
-    detections = detect_objects(image_path)
-    print(detections)
