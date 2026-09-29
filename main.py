@@ -63,12 +63,16 @@ if file:
     ##############################
     ### compute agent response ###
     ##############################
-    with NamedTemporaryFile(dir='.') as f:
-        f.write(file.getbuffer())
-        image_path = f.name
+    if user_question:
+        # close the file before the tools open it, otherwise Windows can't read it
+        suffix = os.path.splitext(file.name)[1]
+        with NamedTemporaryFile(dir='.', suffix=suffix, delete=False) as f:
+            f.write(file.getbuffer())
+            image_path = f.name
 
-        # write agent response
-        if user_question and user_question != "":
+        try:
             with st.spinner(text="In progress..."):
                 response = agent.run('{}, this is the image path: {}'.format(user_question, image_path))
                 st.write(response)
+        finally:
+            os.remove(image_path)
